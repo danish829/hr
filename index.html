@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Attendance & Punctuality Review — Jul–Sep 2026</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap">
+<style>
+:root{
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+  --field:#f1f3f6; --paper:#ffffff; --ink:#1c2a3a; --mut:#66727f; --hair:#dde2e8;
+  --late:#b3362b; --latebg:#f6e4e1; --ok:#16766b; --okbg:#e2efed; --warn:#b06a12;
+  --rowh:#f7f9fb; --focus:#1c5fb8;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --field:#12161c; --paper:#1b2129; --ink:#e7ebf1; --mut:#97a2ae; --hair:#2d3642;
+    --late:#e2756a; --latebg:#3c2420; --ok:#53b3a5; --okbg:#1c312e; --warn:#d99a4e;
+    --rowh:#212935; --focus:#7fb0e8;
+  }
+}
+:root[data-theme="dark"]{
+  --field:#12161c; --paper:#1b2129; --ink:#e7ebf1; --mut:#97a2ae; --hair:#2d3642;
+  --late:#e2756a; --latebg:#3c2420; --ok:#53b3a5; --okbg:#1c312e; --warn:#d99a4e;
+  --rowh:#212935; --focus:#7fb0e8;
+}
+html{scroll-padding-top:env(safe-area-inset-top,0px);height:100%}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--field);color:var(--ink);font-family:'IBM Plex Sans',-apple-system,'Segoe UI',Arial,sans-serif;font-size:14px;line-height:1.5;height:100%}
+.page{max-width:960px;margin:0 auto;padding:30px 20px 48px}
+.sheet{background:var(--paper);border:1px solid var(--hair);border-radius:6px;padding:40px 44px 36px;box-shadow:0 1px 2px rgba(20,30,45,.06)}
+@media(max-width:700px){.page{padding:14px 8px 32px}.sheet{padding:24px 18px}}
+
+.mast{border-bottom:3px solid var(--ink);padding-bottom:14px;margin-bottom:8px}
+.mast .org{font-weight:600;font-size:13px;color:var(--mut)}
+.mast h1{font-size:27px;font-weight:700;letter-spacing:-.4px;line-height:1.15;margin-top:4px}
+.mast .meta{font-size:12.5px;color:var(--mut);margin-top:6px}
+.verdict{font-size:18px;font-weight:500;line-height:1.45;margin:20px 0 4px;max-width:46em}
+.verdict strong{color:var(--late);font-weight:700}
+
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:0;border:1px solid var(--hair);border-radius:6px;overflow:hidden;margin:18px 0 28px}
+.kpi{padding:12px 16px;border-right:1px solid var(--hair);background:var(--paper)}
+.kpi:last-child{border-right:none}
+@media(max-width:700px){.kpi{border-bottom:1px solid var(--hair)}}
+.kpi .v{font-size:23px;font-weight:700;letter-spacing:-.4px}
+.kpi .v.bad{color:var(--late)}
+.kpi .l{font-size:12px;color:var(--mut);margin-top:1px}
+
+section{margin-top:30px}
+section>h2{font-size:16px;font-weight:700;letter-spacing:-.2px}
+section>.sub{font-size:12.5px;color:var(--mut);margin:2px 0 14px;max-width:52em}
+
+.hist{display:flex;align-items:flex-end;gap:5px;height:150px;margin-top:18px;position:relative}
+.hbar{flex:1;display:flex;flex-direction:column;justify-content:flex-end;height:100%;min-width:0}
+.hbar .col{border-radius:3px 3px 0 0;background:var(--ok)}
+.hbar.lt .col{background:var(--late)}
+.hbar .pct{font-size:11px;font-weight:600;text-align:center;margin-bottom:3px;color:var(--mut)}
+.hbar.big .pct{color:var(--ink);font-size:12px}
+.hlab{display:flex;gap:5px;margin-top:6px}
+.hlab span{flex:1;font-size:10.5px;color:var(--mut);text-align:center;line-height:1.2}
+.cutwrap{position:relative;margin-top:10px}
+.cut{position:absolute;top:-186px;bottom:22px;width:2px;background:var(--late)}
+.cuttag{position:absolute;top:-204px;transform:translateX(-50%);background:var(--late);color:#fff;font-size:11px;font-weight:600;padding:2px 8px;border-radius:3px;white-space:nowrap}
+.histleg{display:flex;gap:18px;font-size:12px;color:var(--mut);margin-top:12px;flex-wrap:wrap}
+.dotk{display:inline-block;width:10px;height:10px;border-radius:2px;vertical-align:-1px;margin-right:5px}
+
+table{width:100%;border-collapse:collapse}
+thead th{font-size:11.5px;font-weight:600;color:var(--mut);text-align:left;padding:0;border-bottom:2px solid var(--ink)}
+thead th.plain{padding:7px 10px}
+td{padding:7px 10px;border-bottom:1px solid var(--hair);font-size:13px;vertical-align:middle}
+th.r,td.r{text-align:right}
+tbody tr:hover td{background:var(--rowh)}
+.thbtn{width:100%;background:none;border:none;color:inherit;font:inherit;font-weight:600;text-align:inherit;padding:7px 10px;cursor:pointer;display:flex;align-items:center;gap:4px}
+th.r .thbtn{justify-content:flex-end}
+.thbtn:focus-visible{outline:2px solid var(--focus);outline-offset:-2px}
+.thbtn .arr{font-size:9px;opacity:0;width:8px}
+th.sorted .thbtn{color:var(--ink)}
+th.sorted .thbtn .arr{opacity:1}
+.dbar{display:flex;align-items:center;gap:8px}
+.dtrack{flex:1;height:10px;background:var(--field);border-radius:3px;overflow:hidden;min-width:60px}
+.dfill{height:100%;border-radius:3px}
+.dnum{font-weight:600;width:48px;text-align:right;font-variant-numeric:tabular-nums}
+.tnum{font-variant-numeric:tabular-nums}
+.scroll{overflow-x:auto;margin:0 -6px;padding:0 6px}
+
+.controls{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:12px}
+.seg{display:inline-flex;border:1px solid var(--hair);border-radius:6px;overflow:hidden}
+.seg button{background:var(--paper);color:var(--ink);border:none;border-right:1px solid var(--hair);padding:6px 14px;font:inherit;font-size:13px;cursor:pointer}
+.seg button:last-child{border-right:none}
+.seg button.on{background:var(--ink);color:var(--paper);font-weight:600}
+.seg button:focus-visible,input:focus-visible,.vsel:focus-visible{outline:2px solid var(--focus);outline-offset:-1px}
+.nin{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--mut)}
+.nin input[type=number]{width:64px;padding:6px 8px;border:1px solid var(--hair);border-radius:6px;background:var(--paper);color:var(--ink);font:inherit}
+.vsel{padding:6px 10px;border:1px solid var(--hair);border-radius:6px;background:var(--paper);color:var(--ink);font:inherit;font-size:13px;max-width:180px}
+.search{flex:1;min-width:150px}
+.search input{width:100%;padding:6px 10px;border:1px solid var(--hair);border-radius:6px;background:var(--paper);color:var(--ink);font:inherit;font-size:13px}
+.ratepill{display:inline-block;min-width:46px;text-align:center;border-radius:3px;padding:1px 7px;font-weight:600;font-size:12px;font-variant-numeric:tabular-nums}
+.r-hi{background:var(--latebg);color:var(--late)}
+.r-md{background:var(--okbg);color:var(--warn)}
+.r-lo{background:var(--field);color:var(--mut)}
+.count-note{font-size:12px;color:var(--mut);margin-top:8px}
+.rank{color:var(--mut);font-variant-numeric:tabular-nums}
+footer{margin-top:26px;padding-top:12px;border-top:1px solid var(--hair);font-size:11.5px;color:var(--mut);line-height:1.6}
+@media (prefers-reduced-motion: no-preference){
+  .seg button,.dfill{transition:background .15s,width .3s}
+}
+</style>
+</head>
+<body>
+<div class="page"><div class="sheet">
+
+<div class="mast">
+  <div class="org">Elets Technomedia — Human Resources</div>
+  <h1>Attendance &amp; Punctuality Review</h1>
+  <div class="meta">July–September 2026. Biometric in/out records, 121 staff, 5,765 present person-days. An arrival counts as late when the first punch is after 10:10 am. Scope: mapped business verticals only — Management, Support, unmapped and test accounts excluded.</div>
+</div>
+
+<p class="verdict">More than <strong>1 in 3 workdays began after 10:10 am</strong>, holding steady across all three months. Most staff arrive between 9:30 and 10:00, so the norm is achievable; when people are late, they are late by <strong>48 minutes on average</strong>.</p>
+
+<div class="kpis">
+  <div class="kpi"><div class="v bad">37.3%</div><div class="l">of days late (2,149)</div></div>
+  <div class="kpi"><div class="v">10:10</div><div class="l">average first punch</div></div>
+  <div class="kpi"><div class="v">+48 min</div><div class="l">average delay when late</div></div>
+  <div class="kpi"><div class="v">8:07</div><div class="l">avg hours/day (9:00 norm)</div></div>
+  <div class="kpi"><div class="v">≥54 min</div><div class="l">avg daily break, measured</div></div>
+</div>
+
+<section>
+  <h2>When people actually arrive</h2>
+  <div class="sub">Share of all present days by first-punch time. Everything right of the red line counts as late.</div>
+  <div class="hist" id="hist"></div>
+  <div class="hlab" id="hlab"></div>
+  <div class="cutwrap"><div class="cut" id="cutline"></div><div class="cuttag" id="cuttag">10:10 cutoff</div></div>
+  <div class="histleg">
+    <span><span class="dotk" style="background:var(--ok)"></span>On time — 62.7% of days</span>
+    <span><span class="dotk" style="background:var(--late)"></span>Late — 37.3% of days</span>
+  </div>
+</section>
+
+<section>
+  <h2>Month by month</h2>
+  <div class="sub">The pattern is stable — no month stands out, which points to a standing norm rather than a seasonal slip.</div>
+  <div class="scroll"><table><thead>
+    <tr><th class="plain">Month</th><th class="plain r">Staff</th><th class="plain r">Present days</th><th class="plain" style="width:30%">Late rate</th><th class="plain r">Late days</th><th class="plain r">Avg first in</th><th class="plain r">Avg delay when late</th><th class="plain r">Avg hrs/day</th></tr>
+  </thead><tbody id="monbody"></tbody></table></div>
+</section>
+
+<section>
+  <h2>Employee detail</h2>
+  <div class="sub">Every employee with department and vertical. Click any column heading to sort; Top-n applies after sorting, so "Top 10" by average hours shows the ten lowest or highest. Weekly offs and absences are excluded from the day base.</div>
+  <div class="controls">
+    <div class="seg" id="seg" role="group" aria-label="How many rows to show">
+      <button data-n="10" class="on">Top 10</button>
+      <button data-n="20">Top 20</button>
+      <button data-n="50">Top 50</button>
+      <button data-n="all">All</button>
+    </div>
+    <label class="nin">or top <input type="number" id="customN" min="1" max="121" placeholder="n" aria-label="Custom number of rows"></label>
+    <select id="dfilter" class="vsel" aria-label="Filter by department"></select>
+    <select id="vfilter" class="vsel" aria-label="Filter by vertical"></select>
+    <div class="search"><input type="search" id="q" placeholder="Search name…" aria-label="Search employees"></div>
+  </div>
+  <div class="scroll"><table class="off"><thead id="offhead"></thead><tbody id="offbody"></tbody></table></div>
+  <div class="count-note" id="countnote"></div>
+</section>
+
+<footer>Late = first punch after 10:10 am on present days (P / half-day / half-day-late); weekly offs and absences excluded. Hours are gross, first to last punch. The biometric export caps at 6 punch-pairs a day, so break figures are minimums; verify punch-level data before any individual HR action. Source: AllInout_WithBreak July–September 2026 exports, verticals from the Active Employee master. Full drill-down: Elets_Attendance_Analysis_Jul-Sep_2026.xlsx. Prepared 1 October 2026.</footer>
+
+</div></div>
+
+<script>
+const DIST=[
+ {l:"before 9",p:4.7,late:false},{l:"9–9:30",p:9.4,late:false},
+ {l:"9:30–10",p:37.9,late:false},{l:"10–10:10",p:10.7,late:false},
+ {l:"10:10–10:30",p:15.8,late:true},{l:"10:30–11",p:12.2,late:true},
+ {l:"11–12",p:5.2,late:true},{l:"after 12",p:4.1,late:true}];
+const CUT_AFTER=4; /* cutoff sits after this many buckets */
+const MONTHS=[
+ {n:"July",s:103,d:2014,l:743,p:36.9,i:609,dl:47,w:498},
+ {n:"August",s:104,d:1693,l:658,p:38.9,i:612,dl:50,w:479},
+ {n:"September",s:120,d:2058,l:748,p:36.3,i:611,dl:48,w:483}];
+const EMPS=[{"n":"Kalpana Singh","d":"CRG","v":"Egov","p":66,"l":65,"pc":98,"i":647,"w":464,"m":38},{"n":"Achinto Datta","d":"CRG","v":"Egov","p":62,"l":59,"pc":95,"i":631,"w":501,"m":23},{"n":"Ashish Kumar Dubey","d":"BAT","v":"BAT","p":56,"l":55,"pc":98,"i":645,"w":487,"m":37},{"n":"Shivam Pathania","d":"CRG","v":"BFSI","p":60,"l":54,"pc":90,"i":643,"w":499,"m":37},{"n":"Akshara Sethi","d":"CRG","v":"Egov","p":60,"l":49,"pc":82,"i":623,"w":494,"m":17},{"n":"Sanya Tara","d":"CRG","v":"Egov","p":48,"l":47,"pc":98,"i":690,"w":447,"m":81},{"n":"Diksha Bhardwaj","d":"KRG","v":"SET","p":50,"l":47,"pc":94,"i":663,"w":472,"m":57},{"n":"Medha Dixit","d":"HR","v":"HR","p":63,"l":47,"pc":75,"i":642,"w":488,"m":45},{"n":"Aditi Thakur","d":"CRG","v":"Egov","p":49,"l":46,"pc":94,"i":645,"w":485,"m":38},{"n":"Prashant Panchal","d":"EMG","v":"Event Management","p":47,"l":43,"pc":91,"i":657,"w":457,"m":55},{"n":"Vansh Gaba","d":"Web Dev","v":"Web","p":43,"l":42,"pc":98,"i":681,"w":483,"m":73},{"n":"Priya Singh","d":"IMG BFSI","v":"BFSI","p":49,"l":42,"pc":86,"i":663,"w":455,"m":69},{"n":"Drishti Pahwa","d":"CRG","v":"Egov","p":58,"l":42,"pc":72,"i":622,"w":485,"m":20},{"n":"Vansh Saxena","d":"IMG Digital Learning","v":"DL","p":63,"l":41,"pc":65,"i":629,"w":469,"m":35},{"n":"Vishal Thakur","d":"Finance","v":"Accounts","p":67,"l":40,"pc":60,"i":624,"w":500,"m":37},{"n":"Shubham Kumar","d":"CVG","v":"Design","p":64,"l":39,"pc":61,"i":627,"w":519,"m":38},{"n":"Vishal Chauhan","d":"EMG","v":"Event Management","p":38,"l":38,"pc":100,"i":656,"w":457,"m":46},{"n":"Gaurav Dogra","d":"Finance","v":"Accounts","p":63,"l":38,"pc":60,"i":623,"w":493,"m":27},{"n":"Nikhil Kumar","d":"KRG","v":"Egov","p":37,"l":37,"pc":100,"i":707,"w":395,"m":97},{"n":"Harsh Dev","d":"EMG","v":"Event Management","p":47,"l":37,"pc":79,"i":644,"w":470,"m":45},{"n":"Ajay Singh","d":"Finance","v":"Accounts","p":69,"l":36,"pc":52,"i":610,"w":518,"m":27},{"n":"Anubhav Kumar Dwivedi","d":"CRG","v":"Health & Pharma","p":36,"l":34,"pc":94,"i":627,"w":483,"m":18},{"n":"Md. Iqbal","d":"IMG Digital Learning","v":"DL","p":63,"l":33,"pc":52,"i":624,"w":492,"m":43},{"n":"Abhineet Kumar","d":"KRG","v":"Editorial","p":64,"l":33,"pc":52,"i":638,"w":494,"m":68},{"n":"Abhishek","d":"CVG","v":"Design","p":69,"l":32,"pc":46,"i":621,"w":510,"m":38},{"n":"Rohit Goyal","d":"Web Dev","v":"Web","p":57,"l":31,"pc":54,"i":616,"w":498,"m":23},{"n":"Anisha Sen","d":"IMG eGov","v":"SET","p":55,"l":30,"pc":55,"i":618,"w":461,"m":29},{"n":"Rajni Kumari","d":"IMG eGov","v":"SET","p":67,"l":30,"pc":45,"i":615,"w":451,"m":39},{"n":"Apurva","d":"KRG","v":"Egov","p":40,"l":28,"pc":70,"i":645,"w":465,"m":55},{"n":"Asif Rabbani","d":"IMG Digital Learning","v":"DL","p":71,"l":28,"pc":39,"i":607,"w":503,"m":23},{"n":"Ayush Agarwal","d":"CRG","v":"DL","p":66,"l":27,"pc":41,"i":617,"w":452,"m":39},{"n":"Shruti Agarwal","d":"CRG","v":"Health & Pharma","p":62,"l":26,"pc":42,"i":617,"w":462,"m":29},{"n":"Ronak Tiwari","d":"CRG","v":"Health & Pharma","p":63,"l":26,"pc":41,"i":617,"w":471,"m":44},{"n":"Ragni Nayak","d":"IMG eGov","v":"BFSI","p":56,"l":24,"pc":43,"i":636,"w":475,"m":80},{"n":"Khushi Varshney","d":"KRG","v":"Egov","p":26,"l":22,"pc":85,"i":630,"w":488,"m":27},{"n":"Harsh Chauhan","d":"CRG","v":"Health & Pharma","p":63,"l":22,"pc":35,"i":607,"w":480,"m":28},{"n":"Chetan Tawakley","d":"Web Dev","v":"SEO","p":68,"l":22,"pc":32,"i":629,"w":534,"m":83},{"n":"Anuj Kumar","d":"IMG eGov","v":"Egov","p":21,"l":21,"pc":100,"i":803,"w":318,"m":193},{"n":"Nikita Dixit","d":"IMG eGov","v":"Egov","p":22,"l":21,"pc":95,"i":675,"w":484,"m":68},{"n":"Mohammad Suhail Khan","d":"PMG","v":"BFSI","p":52,"l":21,"pc":40,"i":615,"w":518,"m":33},{"n":"Simran Singh","d":"IMG BFSI","v":"BFSI","p":64,"l":21,"pc":33,"i":598,"w":505,"m":25},{"n":"Vaishali Barthwal","d":"KRG","v":"Egov","p":24,"l":20,"pc":83,"i":644,"w":449,"m":43},{"n":"Mudit Sharma","d":"CRG","v":"BFSI","p":55,"l":20,"pc":36,"i":627,"w":483,"m":76},{"n":"Khushi Sharma","d":"BAT","v":"BAT","p":63,"l":20,"pc":32,"i":605,"w":488,"m":13},{"n":"Vishwas Sinha","d":"KRG","v":"Editorial","p":49,"l":19,"pc":39,"i":633,"w":483,"m":89},{"n":"Sahaj Anand","d":"KRG","v":"Editorial","p":60,"l":19,"pc":32,"i":605,"w":505,"m":13},{"n":"Nishtha Manu","d":"IMG eHealth","v":"Health & Pharma","p":66,"l":19,"pc":29,"i":603,"w":500,"m":15},{"n":"Litishia Raina","d":"PMG","v":"BFSI","p":65,"l":18,"pc":28,"i":610,"w":507,"m":34},{"n":"Priyanshi Agrawal","d":"CRG","v":"Health & Pharma","p":68,"l":18,"pc":26,"i":616,"w":465,"m":70},{"n":"Karanveer Singh","d":"CRG","v":"Egov","p":18,"l":17,"pc":94,"i":684,"w":420,"m":79},{"n":"Vipul Jain","d":"CRG","v":"BFSI","p":55,"l":16,"pc":29,"i":611,"w":489,"m":36},{"n":"Pammi Singh","d":"KRG","v":"IMG","p":49,"l":15,"pc":31,"i":595,"w":461,"m":24},{"n":"Km Arpana Singh","d":"CRG","v":"Health & Pharma","p":60,"l":15,"pc":25,"i":599,"w":501,"m":13},{"n":"Aayushi Malhotra","d":"IMG Digital Learning","v":"DL","p":59,"l":15,"pc":25,"i":613,"w":475,"m":42},{"n":"Archana Kj","d":"HR","v":"HR","p":66,"l":15,"pc":23,"i":600,"w":498,"m":15},{"n":"Akansha Pal","d":"CRG","v":"BFSI","p":62,"l":14,"pc":23,"i":606,"w":501,"m":29},{"n":"Rajiv Ranjan","d":"CRG","v":"Bureau","p":13,"l":13,"pc":100,"i":681,"w":337,"m":71},{"n":"Abhinav Rajwar","d":"IMG eGov","v":"IMG","p":43,"l":12,"pc":28,"i":610,"w":495,"m":79},{"n":"Ankush Singh","d":"CVG","v":"Design","p":53,"l":12,"pc":23,"i":594,"w":478,"m":51},{"n":"Wama Vasant","d":"CVG","v":"Design","p":56,"l":12,"pc":21,"i":579,"w":543,"m":46},{"n":"Abhishek Sinha","d":"CVG","v":"Design","p":64,"l":12,"pc":19,"i":604,"w":499,"m":40},{"n":"Shalini Rawat","d":"IMG eGov","v":"Egov","p":11,"l":11,"pc":100,"i":702,"w":433,"m":92},{"n":"Anil Sharma","d":"CRG","v":"Egov","p":11,"l":11,"pc":100,"i":636,"w":425,"m":26},{"n":"Jeetendra Rajput","d":"CRG","v":"DL","p":13,"l":11,"pc":85,"i":626,"w":435,"m":20},{"n":"Abhishek Rajdhar Dubey","d":"Web Dev","v":"Web","p":39,"l":11,"pc":28,"i":608,"w":469,"m":47},{"n":"Mohan Kumar","d":"Finance","v":"Accounts","p":70,"l":11,"pc":16,"i":582,"w":536,"m":23},{"n":"Shruti Suman","d":"KRG","v":"Bureau","p":13,"l":10,"pc":77,"i":626,"w":452,"m":24},{"n":"Vipin Kumar Verma","d":"Web Dev","v":"Web","p":64,"l":10,"pc":16,"i":602,"w":556,"m":50},{"n":"Kajal Jha","d":"HR","v":"HR","p":62,"l":10,"pc":16,"i":587,"w":510,"m":48},{"n":"Krrish Kumar","d":"IMG eHealth","v":"Health & Pharma","p":61,"l":10,"pc":16,"i":599,"w":488,"m":49},{"n":"Shyam Kishore","d":"CVG","v":"Design","p":66,"l":10,"pc":15,"i":571,"w":512,"m":69},{"n":"Aman Kumar","d":"CVG","v":"Design","p":66,"l":10,"pc":15,"i":605,"w":496,"m":100},{"n":"Nijhum Rudra","d":"KRG","v":"Bureau","p":9,"l":9,"pc":100,"i":798,"w":277,"m":188},{"n":"Sameer Sachdeva","d":"KRG","v":"Bureau","p":37,"l":9,"pc":24,"i":621,"w":363,"m":172},{"n":"Prerna","d":"Web Dev","v":"SEO","p":52,"l":9,"pc":17,"i":604,"w":480,"m":88},{"n":"Swati Bhattacharya","d":"IMG BFSI","v":"BFSI","p":54,"l":9,"pc":17,"i":595,"w":503,"m":35},{"n":"Prem Ranjan Das","d":"CRG","v":"Health & Pharma","p":58,"l":9,"pc":16,"i":593,"w":512,"m":14},{"n":"Shivani Rathor","d":"Founder's Office","v":"Founder's Office","p":61,"l":9,"pc":15,"i":588,"w":532,"m":28},{"n":"Harshita Pal","d":"CRG","v":"Egov","p":21,"l":8,"pc":38,"i":618,"w":487,"m":32},{"n":"Aniket Sharma","d":"IMG eGov","v":"IMG","p":27,"l":8,"pc":30,"i":604,"w":474,"m":32},{"n":"Sakshi Raj","d":"CRG","v":"Health & Pharma","p":41,"l":8,"pc":20,"i":604,"w":486,"m":32},{"n":"Pooja","d":"BAT","v":"BAT","p":60,"l":8,"pc":13,"i":591,"w":471,"m":19},{"n":"Ritik Sharma","d":"IMG eGov","v":"IMG","p":12,"l":7,"pc":58,"i":642,"w":462,"m":65},{"n":"Anandasri Talukdar","d":"IMG eHealth","v":"IMG","p":32,"l":7,"pc":22,"i":609,"w":464,"m":119},{"n":"Asawari Savant","d":"PMG","v":"Editorial","p":54,"l":7,"pc":13,"i":571,"w":533,"m":82},{"n":"Zaara Zahid Siddiquie","d":"CRG","v":"DL","p":55,"l":7,"pc":13,"i":593,"w":466,"m":37},{"n":"Anurag Lakha","d":"CRG","v":"DL","p":65,"l":7,"pc":11,"i":587,"w":477,"m":43},{"n":"Juveriya Khan","d":"CRG","v":"DL","p":33,"l":6,"pc":18,"i":600,"w":472,"m":56},{"n":"Yashwant Singh","d":"IMG eGov","v":"IMG","p":35,"l":6,"pc":17,"i":601,"w":456,"m":54},{"n":"Akansha Arora","d":"HR","v":"HR","p":63,"l":6,"pc":10,"i":556,"w":509,"m":20},{"n":"Om Prakash","d":"CVG","v":"Design","p":68,"l":6,"pc":9,"i":601,"w":491,"m":147},{"n":"Raghav Kaushik","d":"IMG eGov","v":"Egov","p":5,"l":5,"pc":100,"i":666,"w":473,"m":56},{"n":"Priya Varshney","d":"CRG","v":"DL","p":10,"l":5,"pc":50,"i":610,"w":453,"m":14},{"n":"Nakul Gaur","d":"CRG","v":"DL","p":34,"l":5,"pc":15,"i":581,"w":398,"m":139},{"n":"Mahak Arora","d":"CRG","v":"DL","p":41,"l":5,"pc":12,"i":616,"w":448,"m":139},{"n":"Siddhartha Kulshreshtha","d":"Web Dev","v":"Web","p":52,"l":5,"pc":10,"i":581,"w":549,"m":31},{"n":"Krishna Kumar Singh","d":"CRG","v":"DL","p":64,"l":5,"pc":8,"i":591,"w":477,"m":7},{"n":"Kaanchi Chawla","d":"KRG","v":"Editorial","p":64,"l":5,"pc":8,"i":600,"w":482,"m":49},{"n":"Rinki Verma","d":"IMG Digital Learning","v":"DL","p":63,"l":5,"pc":8,"i":597,"w":480,"m":22},{"n":"Priyanka Dua","d":"KRG","v":"Bureau","p":4,"l":4,"pc":100,"i":838,"w":223,"m":228},{"n":"Kashish Sinha","d":"IMG eGov","v":"SET","p":32,"l":4,"pc":12,"i":588,"w":478,"m":24},{"n":"Arshika Bhatnagar","d":"IMG eHealth","v":"DL","p":53,"l":4,"pc":8,"i":580,"w":475,"m":41},{"n":"Tanya Rai","d":"IMG eGov","v":"SET","p":58,"l":4,"pc":7,"i":586,"w":489,"m":27},{"n":"Shankar Giri","d":"CVG","v":"Design","p":67,"l":4,"pc":6,"i":573,"w":530,"m":72},{"n":"Muskan Jaiswal","d":"KRG","v":"Bureau","p":4,"l":3,"pc":75,"i":640,"w":475,"m":45},{"n":"Sanya Singh","d":"IMG BFSI","v":"DL","p":8,"l":3,"pc":38,"i":644,"w":421,"m":115},{"n":"Arpit","d":"IMG eGov","v":"DL","p":45,"l":3,"pc":7,"i":586,"w":485,"m":131},{"n":"Shreya Kumari","d":"IMG eGov","v":"BFSI","p":59,"l":3,"pc":5,"i":527,"w":528,"m":19},{"n":"Rini","d":"IMG eGov","v":"IMG","p":63,"l":3,"pc":5,"i":554,"w":499,"m":61},{"n":"Abhay Malhotra","d":"CRG","v":"DL","p":70,"l":3,"pc":4,"i":580,"w":483,"m":29},{"n":"Rinki Kumari","d":"IMG eGov","v":"SET","p":69,"l":3,"pc":4,"i":570,"w":492,"m":10},{"n":"Ritika Srivastava","d":"KRG","v":"Bureau","p":2,"l":2,"pc":100,"i":856,"w":281,"m":246},{"n":"Teresa Smrutirekha","d":"CRG","v":"BFSI","p":18,"l":2,"pc":11,"i":600,"w":499,"m":28},{"n":"Danish Saifi","d":"BAT","v":"BAT","p":61,"l":2,"pc":3,"i":574,"w":513,"m":57},{"n":"Vidushi Arya","d":"Web Dev","v":"Web","p":1,"l":1,"pc":100,"i":1010,"w":96,"m":400},{"n":"Sakshi Sah","d":"KRG","v":"Editorial","p":1,"l":1,"pc":100,"i":1063,"w":47,"m":453},{"n":"Rose Jaiswal","d":"IMG eGov","v":"Bureau","p":1,"l":1,"pc":100,"i":971,"w":123,"m":361},{"n":"Sejal Joshi","d":"CRG","v":"BFSI","p":57,"l":1,"pc":2,"i":586,"w":526,"m":217},{"n":"Aaditi","d":"CVG","v":"Design","p":55,"l":1,"pc":2,"i":577,"w":504,"m":164},{"n":"Deepak Kumar","d":"ITMG","v":"IT","p":45,"l":0,"pc":0,"i":576,"w":494,"m":0},{"n":"Shivangi Sharma","d":"PMG","v":"Founder's Office","p":54,"l":0,"pc":0,"i":535,"w":495,"m":0}];
+
+const hm=m=>m==null?"–":Math.floor(m/60)+":"+String(Math.round(m)%60).padStart(2,"0");
+
+/* histogram */
+const hist=document.getElementById('hist'), hlab=document.getElementById('hlab');
+const maxP=Math.max(...DIST.map(d=>d.p));
+DIST.forEach(d=>{
+  const b=document.createElement('div');
+  b.className='hbar'+(d.late?' lt':'')+(d.p>=15?' big':'');
+  b.innerHTML=`<div class="pct">${d.p.toFixed(1)}%</div><div class="col" style="height:${(d.p/maxP*100).toFixed(1)}%"></div>`;
+  hist.appendChild(b);
+  const s=document.createElement('span'); s.textContent=d.l; hlab.appendChild(s);
+});
+function placeCut(){
+  const w=hist.clientWidth, gap=5, n=DIST.length;
+  const slot=(w-gap*(n-1))/n;
+  const x=slot*CUT_AFTER+gap*(CUT_AFTER-1)+gap/2;
+  document.getElementById('cutline').style.left=x+'px';
+  document.getElementById('cuttag').style.left=x+'px';
+}
+requestAnimationFrame(placeCut); addEventListener('resize',placeCut);
+
+/* month table */
+const mb=document.getElementById('monbody');
+MONTHS.forEach(d=>{
+  const col=d.p>=45?'var(--late)':d.p>=30?'var(--warn)':'var(--ok)';
+  const tr=document.createElement('tr');
+  tr.innerHTML=`<td style="font-weight:600">${d.n}</td><td class="r tnum">${d.s}</td><td class="r tnum">${d.d.toLocaleString('en-IN')}</td>
+    <td><div class="dbar"><div class="dtrack"><div class="dfill" style="width:${d.p}%;background:${col}"></div></div><div class="dnum">${d.p.toFixed(1)}%</div></div></td>
+    <td class="r tnum">${d.l}</td><td class="r tnum">${hm(d.i)}</td><td class="r tnum">+${d.dl} min</td><td class="r tnum">${hm(d.w)}</td>`;
+  mb.appendChild(tr);
+});
+
+/* employee table — sortable */
+const COLS=[
+ {k:'rk', t:'#',           r:false, num:true},
+ {k:'n',  t:'Employee',    r:false, num:false},
+ {k:'d',  t:'Dept',        r:false, num:false},
+ {k:'v',  t:'Vertical',    r:false, num:false},
+ {k:'l',  t:'Late days',   r:true,  num:true},
+ {k:'p',  t:'Present',     r:true,  num:true},
+ {k:'pc', t:'Rate',        r:true,  num:true},
+ {k:'i',  t:'Avg first in',r:true,  num:true},
+ {k:'m',  t:'Avg delay',   r:true,  num:true},
+ {k:'w',  t:'Avg hrs/day', r:true,  num:true}];
+let sortK='l', sortDir=-1, N=10;
+const head=document.getElementById('offhead'), body=document.getElementById('offbody'), note=document.getElementById('countnote');
+const seg=document.getElementById('seg'), customN=document.getElementById('customN'), q=document.getElementById('q');
+const vf=document.getElementById('vfilter'), df=document.getElementById('dfilter');
+vf.innerHTML='<option value="">All verticals</option>'+[...new Set(EMPS.map(e=>e.v))].sort().map(v=>`<option>${v}</option>`).join('');
+df.innerHTML='<option value="">All departments</option>'+[...new Set(EMPS.map(e=>e.d))].sort().map(v=>`<option>${v}</option>`).join('');
+
+function renderHead(){
+  head.innerHTML='<tr>'+COLS.map(c=>{
+    const on=c.k===sortK, arr=on?(sortDir===1?'▲':'▼'):'▲';
+    return `<th class="${c.r?'r ':''}${on?'sorted':''}"><button type="button" class="thbtn" data-k="${c.k}" aria-label="Sort by ${c.t}">${c.t}<span class="arr">${arr}</span></button></th>`;
+  }).join('')+'</tr>';
+}
+head.addEventListener('click',e=>{
+  const b=e.target.closest('.thbtn'); if(!b) return;
+  const k=b.dataset.k;
+  if(sortK===k) sortDir*=-1; else {sortK=k; sortDir=(k==='n'||k==='d'||k==='v')?1:-1;}
+  render();
+});
+function pill(pc){const c=pc>=60?'r-hi':pc>=35?'r-md':'r-lo';return `<span class="ratepill ${c}">${pc}%</span>`;}
+function render(){
+  renderHead();
+  const term=q.value.trim().toLowerCase(), vsel=vf.value, dsel=df.value;
+  let rows=EMPS.map((e,i)=>({...e,rk:i+1}));
+  if(dsel) rows=rows.filter(e=>e.d===dsel);
+  if(vsel) rows=rows.filter(e=>e.v===vsel);
+  if(term) rows=rows.filter(e=>e.n.toLowerCase().includes(term));
+  const total=rows.length;
+  const col=COLS.find(c=>c.k===sortK);
+  rows.sort((a,b)=>{
+    let x=a[sortK], y=b[sortK];
+    if(x==null) return 1; if(y==null) return -1;
+    if(!col.num){x=String(x).toLowerCase(); y=String(y).toLowerCase(); return x<y?-sortDir:x>y?sortDir:0;}
+    return (x-y)*sortDir;
+  });
+  if(!term && N!=='all') rows=rows.slice(0,N);
+  body.innerHTML=rows.map(e=>`<tr><td class="rank">${e.rk}</td><td>${e.n}</td><td style="color:var(--mut)">${e.d}</td><td style="color:var(--mut)">${e.v}</td>
+    <td class="r tnum">${e.l}</td><td class="r tnum">${e.p}</td><td class="r">${pill(e.pc)}</td>
+    <td class="r tnum">${hm(e.i)}</td><td class="r tnum">${e.l?'+'+e.m+' min':'—'}</td><td class="r tnum">${hm(e.w)}</td></tr>`).join('');
+  const scope=[dsel,vsel].filter(Boolean).join(' / ');
+  const sc=scope?` in ${scope}`:'';
+  const by=` by ${COLS.find(c=>c.k===sortK).t.toLowerCase()} (${sortDir===-1?'high to low':'low to high'})`;
+  note.textContent = term
+    ? `${total} match${total===1?'':'es'} for "${q.value.trim()}"${sc}, sorted${by}. # = rank by late days.`
+    : (N!=='all' && total>N)
+      ? `Top ${N} of ${total} employees${sc}${by}. # = rank by late days.`
+      : `All ${total} employees${sc}, sorted${by}. # = rank by late days.`;
+}
+seg.addEventListener('click',e=>{
+  const b=e.target.closest('button'); if(!b) return;
+  seg.querySelectorAll('button').forEach(x=>x.classList.remove('on'));
+  b.classList.add('on');
+  N=b.dataset.n==='all'?'all':+b.dataset.n;
+  customN.value=''; render();
+});
+customN.addEventListener('input',()=>{
+  const v=parseInt(customN.value,10);
+  if(v>=1){N=Math.min(v,EMPS.length);seg.querySelectorAll('button').forEach(x=>x.classList.remove('on'));render();}
+});
+q.addEventListener('input',render);
+vf.addEventListener('change',render);
+df.addEventListener('change',render);
+render();
+</script>
+</body>
+</html>
